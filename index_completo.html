@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kinesiología UST - KS</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .semestre {
+      margin-bottom: 30px;
+    }
+    .semestre h2 {
+      color: #34495e;
+    }
+    .ramo {
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 5px;
+      display: inline-block;
+      cursor: pointer;
+      background-color: #ecf0f1;
+    }
+    .aprobado {
+      text-decoration: line-through;
+      background-color: #d4edda !important;
+      color: #555;
+    }
+    .bloqueado {
+      background-color: #bdc3c7 !important;
+      cursor: not-allowed;
+    }
+    .desbloqueado {
+      background-color: #fff3cd !important;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kinesiología UST - KS</h1>
+  <div id="malla"></div>
+
+  <script>
+    const data = {
+      "10° Semestre": [{"nombre": "Internado Área Musculo Esquelético", "id": "internado1", "requisitos": ["deporte"], "desbloquea": []}, {"nombre": "Internado Área Neurorrehabilitación", "id": "internado2", "requisitos": ["neuro_adult"], "desbloquea": []}, {"nombre": "Internado Área Cardiorrespiratoria", "id": "internado3", "requisitos": ["cardio_adult"], "desbloquea": []}, {"nombre": "Internado Área Salud Comunitaria", "id": "internado4", "requisitos": ["familiar"], "desbloquea": []}],
+      "9° Semestre": [{"nombre": "Rehabilitación en Condiciones Especiales", "id": "especiales", "requisitos": ["geriatria"], "desbloquea": []}, {"nombre": "Paciente Crítico", "id": "critico", "requisitos": ["cronicos"], "desbloquea": []}, {"nombre": "Rehabilitación y Reintegro en Deporte", "id": "deporte", "requisitos": ["cronicos"], "desbloquea": []}, {"nombre": "Electivo III", "id": "electivoiii", "desbloquea": []}, {"nombre": "Electivo Final Persona y Sentido", "id": "persona_final", "desbloquea": []}],
+      "8° Semestre": [{"nombre": "Rehabilitación Geriátrica", "id": "geriatria", "requisitos": ["familiar"], "desbloquea": []}, {"nombre": "Gestión en Salud para Kinesiólogos", "id": "gestion", "desbloquea": []}, {"nombre": "Prescripción del Ejercicio en Crónicos", "id": "cronicos", "requisitos": ["cardio_adult"], "desbloquea": []}, {"nombre": "Electivo II", "id": "electivoii", "desbloquea": []}, {"nombre": "Seminario de Investigación", "id": "seminario", "requisitos": ["metodologia"], "desbloquea": []}],
+      "7° Semestre": [{"nombre": "Rehabilitación Cardiorrespiratoria Adulto", "id": "cardio_adult", "requisitos": ["cardio_inf"], "desbloquea": []}, {"nombre": "Neurorrehabilitación Adulto", "id": "neuro_adult", "requisitos": ["neuro_inf"], "desbloquea": []}, {"nombre": "Rehabilitación con Base en Salud Familiar", "id": "familiar", "requisitos": ["locomotor_adult"], "desbloquea": []}, {"nombre": "Razonamiento Clínico II", "id": "razonamiento2", "requisitos": ["razonamiento1"], "desbloquea": []}, {"nombre": "Electivo I", "id": "electivoi", "desbloquea": []}],
+      "6° Semestre": [{"nombre": "Rehabilitación Sistema Locomotor Adulto", "id": "locomotor_adult", "requisitos": ["locomotor_inf"], "desbloquea": []}, {"nombre": "Rehabilitación Cardiorrespiratoria Infantil", "id": "cardio_inf", "requisitos": ["ejercicio"], "desbloquea": []}, {"nombre": "Neurorrehabilitación Infantil", "id": "neuro_inf", "requisitos": ["biomecanica"], "desbloquea": []}, {"nombre": "Metodología de la Investigación", "id": "metodologia", "requisitos": ["estadistica"], "desbloquea": []}, {"nombre": "Razonamiento Clínico I", "id": "razonamiento1", "requisitos": ["semiologia"], "desbloquea": []}],
+      "5° Semestre": [{"nombre": "Fisiología del Metabolismo y Ejercicio", "id": "ejercicio", "requisitos": ["fisiopato"], "desbloquea": []}, {"nombre": "Rehabilitación Sistema Locomotor Infantil", "id": "locomotor_inf", "requisitos": ["semiologia"], "desbloquea": []}, {"nombre": "Biomecánica y Control Motor", "id": "biomecanica", "requisitos": ["articular"], "desbloquea": []}, {"nombre": "Electivo Formación General III", "id": "electivo3", "desbloquea": []}],
+      "4° Semestre": [{"nombre": "Fisiopatología y Farmacología", "id": "fisiopato", "requisitos": ["anatomia2"], "desbloquea": []}, {"nombre": "Semiología Kinésica e Imagenología", "id": "semiologia", "requisitos": ["salud"], "desbloquea": []}, {"nombre": "Bioquímica", "id": "bioquimica", "requisitos": ["quimica"], "desbloquea": []}, {"nombre": "Electivo Formación General II", "id": "electivo2", "desbloquea": []}],
+      "1° Semestre": [
+        { nombre: "Fundamentos de Anatomía", id: "anatomia1", desbloquea: ["anatomia2"] },
+        { nombre: "Fundamentos del Movimiento", id: "movimiento1", desbloquea: ["salud", "tejidos"] },
+        { nombre: "Biología Celular", id: "biologia", desbloquea: [] },
+        { nombre: "Principios Matemáticos", id: "matematica", desbloquea: [] },
+        { nombre: "Taller de Competencias Comunicativas", id: "comunicacion", desbloquea: [] },
+      ],
+      "2° Semestre": [
+        { nombre: "Anatomía y Fisiología", id: "anatomia2", requisitos: ["anatomia1"], desbloquea: [] },
+        { nombre: "Actividad Física y Salud", id: "salud", requisitos: ["movimiento1"], desbloquea: [] },
+        { nombre: "Fisiología de Tejidos", id: "tejidos", requisitos: ["movimiento1"], desbloquea: [] },
+        { nombre: "Química", id: "quimica", desbloquea: [] },
+        { nombre: "Atención Básica de Urgencia", id: "urgencia", desbloquea: [] },
+        { nombre: "Inglés I", id: "ingles1", desbloquea: [] },
+      ],
+      "3° Semestre": [
+        { nombre: "Fisiología Articular", id: "articular", requisitos: ["tejidos"], desbloquea: [] },
+        { nombre: "Estadística para Ciencias de la Salud", id: "estadistica", desbloquea: [] },
+        { nombre: "Inglés II", id: "ingles2", requisitos: ["ingles1"], desbloquea: [] },
+        { nombre: "Electivo Formación General I", id: "electivo1", desbloquea: [] },
+        { nombre: "Persona y Sentido", id: "persona", desbloquea: [] },
+      ]
+    };
+
+    const estado = JSON.parse(localStorage.getItem("estadoRamos") || "{}");
+
+    function guardarEstado() {
+      localStorage.setItem("estadoRamos", JSON.stringify(estado));
+    }
+
+    function render() {
+      const container = document.getElementById("malla");
+      container.innerHTML = "";
+
+      Object.entries(data).forEach(([semestre, ramos]) => {
+        const divSemestre = document.createElement("div");
+        divSemestre.className = "semestre";
+        const h2 = document.createElement("h2");
+        h2.textContent = semestre;
+        divSemestre.appendChild(h2);
+
+        ramos.forEach(ramo => {
+          const btn = document.createElement("div");
+          btn.textContent = ramo.nombre;
+          btn.className = "ramo";
+
+          const aprobado = estado[ramo.id];
+          const requisitos = ramo.requisitos || [];
+          const habilitado = requisitos.every(r => estado[r]);
+
+          if (aprobado) {
+            btn.classList.add("aprobado");
+          } else if (!habilitado && requisitos.length > 0) {
+            btn.classList.add("bloqueado");
+          } else if (requisitos.length > 0) {
+            btn.classList.add("desbloqueado");
+          }
+
+          btn.onclick = () => {
+            if (requisitos.length > 0 && !habilitado) return;
+            estado[ramo.id] = !estado[ramo.id];
+            guardarEstado();
+            render();
+          };
+
+          divSemestre.appendChild(btn);
+        });
+
+        container.appendChild(divSemestre);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
